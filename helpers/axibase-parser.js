@@ -13,14 +13,20 @@ function AxibaseParser(source) {
         self.$ = JQuery(self._window);
         self._postElement = self.$('div.post-entry');
         var linkElements = self._postElement.find('a');
+        var imgElements = self._postElement.find('img');
         var links = [];
         linkElements.each(function (index) {
             links.push(self.$(this).attr('href'));
         });
+        imgElements.each(function (index) {
+            links.push(self.$(this).attr('src'));
+        });
         self.resourceLinks = [];
         for (var i = 0; i<links.length; i++) {
             var query = links[i].split('/').pop();
-            if (query.indexOf('.') > -1) {
+            var extension = query.split('.').pop();
+            if (query.indexOf('.') > -1 && extension != 'html') {
+                console.log(extension);
                 self.resourceLinks.push(links[i]);
             }
         }
