@@ -46,7 +46,9 @@ function cellToText(cellElement) {
     text = '';
     for (var i = 0; i< splittedCell.length; i++) {
         if (splittedCell[i] !== '') {
-            text += (' <p>' + splittedCell[i].replace(/(\r\n|\n|\r)/, '') + '</p> ');
+            var prettyText = splittedCell[i].replace(/(\r\n|\n|\r)/, '');
+            if (prettyText !== '')
+            text += (' <p>' + prettyText + '</p> ');
         }
     }
     return text;

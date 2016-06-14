@@ -38,6 +38,7 @@ try {
         fs.access(path, fs.F_OK, function (err) {
             if (!err) {
                 var markdownSource = axibaseParser.translate();
+                markdownSource = markdownSource.replace('](/','](https://axibase.com/');
                 markdownSource = localLinks(axibaseParser.resourceLinks, markdownSource, pathModule.dirname(path));
                 fs.writeFile(path, markdownSource, 'utf8', function (err) {
                     if (!err) {
