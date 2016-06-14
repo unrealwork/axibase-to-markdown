@@ -20,10 +20,9 @@ function getRows(table) {
         var row = table.find(this);
         var tdElements = row.children('td');
         data[i] = new Array(tdElements.size());
-        console.log(tdElements.size());
         tdElements.each(function(ii) {
             var cell = table.find(this);
-            data[i][ii] = cell.text();
+            data[i][ii] = cellToText(cell);
         });
     });
     return data;
@@ -37,6 +36,20 @@ function getHeaders(table) {
         headers[index] = require('../conversions/paragraph-conversion').convert(thElement);
     });
     return headers;
+}
+
+
+function cellToText(cellElement) {
+    var pConvert = require('./paragraph-conversion').convert;
+    var text = pConvert(cellElement);
+    var splittedCell = text.split(/(\r\n|\n|\r)/);
+    text = '';
+    for (var i = 0; i< splittedCell.length; i++) {
+        if (splittedCell[i] !== '') {
+            text += (' <p>' + splittedCell[i].replace(/(\r\n|\n|\r)/, '') + '</p> ');
+        }
+    }
+    return text;
 }
 
 module.exports = {
@@ -57,7 +70,7 @@ module.exports = {
         for (var i = 0; i < rows.length; i++) {
             text += '| ';
             for (var ii  = 0; ii < rows[i].length; ii++) {
-                text += (rows[i][ii].replace(/(\r\n|\n|\r)/gm, ' ') + ' | ');
+                text += (rows[i][ii] + ' | ');
 
             }
             text += '\r\n';

@@ -7,17 +7,33 @@ var JQuery = require('jquery');
 function AxibaseParser(source) {
     this._source = source;
     this.transformations = [];
+    var self = this;
     this.sourceToElement(this._source, function (err, window) {
-        AxibaseParser._window = window;
-        AxibaseParser.$ = JQuery(AxibaseParser._window);
-        AxibaseParser._postElement = AxibaseParser.$('div.post-entry');
+        self._window = window;
+        self.$ = JQuery(self._window);
+        self._postElement = self.$('div.post-entry');
+        var linkElements = self._postElement.find('a');
+        var links = [];
+        linkElements.each(function (index) {
+            links.push(self.$(this).attr('href'));
+        });
+        self.resourceLinks = [];
+        for (var i = 0; i<links.length; i++) {
+            var query = links[i].split('/').pop();
+            if (query.indexOf('.') > -1) {
+                self.resourceLinks.push(links[i]);
+            }
+        }
     });
+
     this.addTransformation(require('../conversions/header-conversion'));
     this.addTransformation(require('../conversions/link-conversion'));
     this.addTransformation(require('../conversions/paragraph-conversion'));
     this.addTransformation(require('../conversions/img-conversion'));
     this.addTransformation(require('../conversions/ul-conversion'));
     this.addTransformation(require('../conversions/table-conversion'));
+    this.addTransformation(require('../conversions/pre-conversion'));
+    this.addTransformation(require('../conversions/ol-conversion'));
 }
 
 AxibaseParser.prototype.addTransformation = function (transformatrion) {
@@ -34,10 +50,15 @@ AxibaseParser.prototype.sourceToElement = function (source, callback) {
     );
 };
 
+
+
 AxibaseParser.prototype._postElement = function (window) {
+
     var $ = JQuery(window);
     var POST_SELECTOR = 'div.post-entry';
     var postElements = $(POST_SELECTOR);
+
+
     return (postElements.length > 0) ? postElements[0] : null;
 };
 
@@ -76,9 +97,9 @@ AxibaseParser.prototype.translate = function () {
 
 AxibaseParser.prototype.postElements = function () {
     var self = this;
-    var elements = AxibaseParser._postElement.find('*');
+    var elements = self._postElement.find('*');
     var postElements = elements.filter(function () {
-        var element = AxibaseParser.$(this);
+        var element = self.$(this);
         for (var index = 0; index < self.transformations.length; index++) {
             var transformation = self.transformations[index];
             if (element.is(transformation.selector)) {

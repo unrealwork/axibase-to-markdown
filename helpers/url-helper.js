@@ -2,6 +2,7 @@
 exports.pageSource = pageSource;
 
 var http = require('http');
+var logger = require('npmlog');
 
 function pageSource(page, callback) {
     var options = {
@@ -11,7 +12,8 @@ function pageSource(page, callback) {
     };
 
     http.get(options, function(res) {
-        var  content = '';
+        var content = '';
+        logger.info('Url: ', 'Trying to get page %j', options.host + options.path);
         if (res.statusCode === 200) {
             res.setEncoding('utf8');
             res.on('data', function(chunk) {
