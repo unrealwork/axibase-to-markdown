@@ -42,7 +42,7 @@ function AxibaseParser(source) {
     this.addTransformation(require('../conversions/ol-conversion'));
     this.addTransformation(require('../conversions/code-conversion'));
     this.addTransformation(require('../conversions/em-conversion'));
-
+    this.addTransformation(require('../conversions/gist-conversion'));
 }
 
 AxibaseParser.prototype.addTransformation = function (transformatrion) {
