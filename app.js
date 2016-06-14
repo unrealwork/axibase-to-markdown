@@ -26,27 +26,29 @@ try {
 
     var url = process.argv[2].toString();
     var path = process.argv[3].toString();
-    if (cwd[0] !== '/') {
-        path = cwd + path;
+    if (path.charAt(0) !== "/") {
+        console.log(cwd);
+        path = cwd + '/' + path;
     }
-    console.log(url);
+    console.log(path);
+
     urlHelper.pageSource(url, function (err, html) {
         if (err) {
             throw err;
         }
         var axibaseParser = new AxiabseParser(html);
         fs.access(path, fs.F_OK, function (err) {
+            var markdownSource = axibaseParser.translate();
+            markdownSource = markdownSource.replace('](/','](https://axibase.com/');
+            markdownSource = localLinks(axibaseParser.resourceLinks, markdownSource, pathModule.dirname(path));
             if (!err) {
-                var markdownSource = axibaseParser.translate();
-                markdownSource = markdownSource.replace('](/','](https://axibase.com/');
-                markdownSource = localLinks(axibaseParser.resourceLinks, markdownSource, pathModule.dirname(path));
                 fs.writeFile(path, markdownSource, 'utf8', function (err) {
                     if (!err) {
                         logger.info('File :', 'Markdown file created in path %j', path);
                     }
                 });
             } else {
-                fs.writeFile(path, axibaseParser.translate(html), 'utf8', function (err) {
+                fs.writeFile(path, markdownSource, 'utf8', function (err) {
                     if (!err) {
                         logger.info('File :', 'Markdown file created in path %j', path);
                     }
@@ -55,6 +57,6 @@ try {
         });
     })
 } catch (e) {
-    logger.error(e);
+    logger.info(e);
     throw  e;
 }
