@@ -40,6 +40,9 @@ function AxibaseParser(source) {
     this.addTransformation(require('../conversions/table-conversion'));
     this.addTransformation(require('../conversions/pre-conversion'));
     this.addTransformation(require('../conversions/ol-conversion'));
+    this.addTransformation(require('../conversions/code-conversion'));
+    this.addTransformation(require('../conversions/em-conversion'));
+
 }
 
 AxibaseParser.prototype.addTransformation = function (transformatrion) {
