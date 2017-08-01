@@ -4,6 +4,7 @@
   "description": "Convert axibase blog post to markdown",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Igor Shmagrinskiy <unrealwork@gmail.com> (http://axibase.com)",
