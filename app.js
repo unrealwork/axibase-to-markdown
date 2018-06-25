@@ -18,28 +18,26 @@ function localLinks(links, markdownSource, fileDir) {
         markdownSource = markdownSource.replace(link, newLink);
     }
     return markdownSource;
-}
-
+};
 
 try {
-
-
     var url = process.argv[2].toString();
     var path = process.argv[3].toString();
-    if (path.charAt(0) !== "/") {
+    if (path.charAt(0) !== '/') {
         console.log(cwd);
         path = cwd + '/' + path;
     }
     console.log(path);
 
     urlHelper.pageSource(url, function (err, html) {
+        console.log(err);
         if (err) {
             throw err;
         }
         var axibaseParser = new AxiabseParser(html);
         fs.access(path, fs.F_OK, function (err) {
             var markdownSource = axibaseParser.translate();
-            markdownSource = markdownSource.replace('](/','](https://axibase.com/');
+            markdownSource = markdownSource.replace('](/', '](https://axibase.com/');
             markdownSource = localLinks(axibaseParser.resourceLinks, markdownSource, pathModule.dirname(path));
             if (!err) {
                 fs.writeFile(path, markdownSource, 'utf8', function (err) {
