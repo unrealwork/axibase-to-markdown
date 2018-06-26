@@ -11,7 +11,7 @@ function AxibaseParser(source) {
     this.sourceToElement(this._source, function (err, window) {
         self._window = window;
         self.$ = JQuery(self._window);
-        self._postElement = self.$('div.post-entry');
+        self._postElement = self.$('.post-entry');
         var linkElements = self._postElement.find('a');
         var imgElements = self._postElement.find('img');
         var links = [];
@@ -22,7 +22,7 @@ function AxibaseParser(source) {
             links.push(self.$(this).attr('src'));
         });
         self.resourceLinks = [];
-        for (var i = 0; i<links.length; i++) {
+        for (var i = 0; i < links.length; i++) {
             var query = links[i].split('/').pop();
             var extension = query.split('.').pop();
             if (query.indexOf('.') > -1 && extension != 'html') {
@@ -58,7 +58,6 @@ AxibaseParser.prototype.sourceToElement = function (source, callback) {
         }
     );
 };
-
 
 
 AxibaseParser.prototype._postElement = function (window) {

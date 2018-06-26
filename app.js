@@ -14,7 +14,7 @@ function localLinks(links, markdownSource, fileDir) {
     for (var i = 0; i < links.length; i++) {
         var link = links[i];
         var fileName = link.split("/").pop();
-        var newLink = 'resources/' + fileName;
+        var newLink = './images/' + fileName;
         markdownSource = markdownSource.replace(link, newLink);
     }
     return markdownSource;
